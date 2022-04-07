@@ -22,23 +22,30 @@ def input_palavras_chave():
 def quantidade_respostas(lista_palavras_chave, op_fisica):
     i = 0
     respostas = []
+    phrase = []
+    df = pd.DataFrame()
     while i < len(lista_palavras_chave):
         contador = 0
         for indice, linha in op_fisica.iteritems():
             if lista_palavras_chave[i] in linha:
                 contador += 1
+                phrase.append(linha)
             else:
                 pass
+        df.insert(i, lista_palavras_chave[i], pd.Series(phrase), allow_duplicates=True)
+        phrase.clear()
         respostas.append((lista_palavras_chave[i], contador))
         i += 1
+    df.to_excel(r'keywords_dataframe.xlsx')
 
+    # Ordenando os números de forma decrescente
     numeros_ordenados = sorted(respostas, key=itemgetter(1), reverse=True)
     for i in numeros_ordenados:
         print('Quantidade de respostas com {}: {}'.format(i[0], i[1]))
     return numeros_ordenados
 
 
-def plot_gra(numeros_ordenados):
+def plot_graph(numeros_ordenados):
     # Plotando o gráfico
     list_x = []
     list_y = []
@@ -46,6 +53,7 @@ def plot_gra(numeros_ordenados):
         list_x.append(x)
         list_y.append(y)
 
+    # Gráfico de barras
     plt.figure(figsize=(15, 8))
     plt.title('Análise de palavras-chave')
     plt.bar(list_x, list_y, color='red')
@@ -67,9 +75,11 @@ def main():
     # Analisando dados
     lista = input_palavras_chave()
 
-    # Plotando gráfico
+    # Organizando palavras em ordem decrescente
     list_sorted = quantidade_respostas(lista, op_fisica)
-    plot_gra(list_sorted)
+
+    # Plotando gráfico
+    plot_graph(list_sorted)
 
     input('\nPressione <Enter> para encerrar!')
 
