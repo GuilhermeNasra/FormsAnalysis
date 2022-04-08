@@ -15,7 +15,7 @@ def input_palavras_chave():
     
     1. Escreva as palavras-chaves desejadas sempre apertando a tecla ENTER para inserir a próxima;
     
-    2. Caso tenha errado alguma palavra-chave, escreva a palavra [remover] para apagar a última palavra digitada;
+    2. Caso tenha errado alguma palavra-chave, escreva a palavra [remover] abaixo da última palavra digitada para apagá-la.;
     
     3. Após escrever todas as palavras-chaves desejadas, aperte a tecla ENTER novamente para iniciar a análise.\n
     
@@ -35,10 +35,13 @@ def input_palavras_chave():
     palavras = input()
     while palavras != '':
         if palavras == 'remover':
-            removido = lista_palavras_chave.pop()
-            print(f'A palavra-chave <{removido}> foi removida com sucesso.\n')
+            if not lista_palavras_chave:
+                print('A lista está vazia!')
+            else:
+                removido = lista_palavras_chave.pop()
+                print(f'A palavra-chave <{removido}> foi removida com sucesso.\n')
         else:
-            lista_palavras_chave.append(palavras)
+            lista_palavras_chave.append(palavras.lower())
         palavras = input()
     return lista_palavras_chave
 
@@ -51,9 +54,9 @@ def quantidade_respostas(lista_palavras_chave, op_fisica):
     while i < len(lista_palavras_chave):
         contador = 0
         for indice, linha in op_fisica.iteritems():
-            if lista_palavras_chave[i] in linha:
+            if lista_palavras_chave[i] in linha.lower():
                 contador += 1
-                phrase.append(linha)
+                phrase.append(linha.lower())
             else:
                 pass
         df.insert(i, lista_palavras_chave[i], pd.Series(phrase), allow_duplicates=True)
