@@ -1,13 +1,37 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from operator import itemgetter
+from rich.console import Console
+from rich.markdown import Markdown
+from time import sleep
+from tqdm import tqdm
 
 
 def input_palavras_chave():
-    lista_palavras_chave = []
-    print('Aperte <Enter> para interromper!\nEscreva as palavras-chave desejadas:')
-    print('Para remover a última palavra-chave digitada, escreva <remover> e aperte <Enter>\n')
+    markdown = """
+    ## ALGORITMO PARA ANÁLISE DE FORMULÁRIOS ##
+    
+    # INSTRUÇÕES #
+    
+    1. Escreva as palavras-chaves desejadas sempre apertando a tecla ENTER para inserir a próxima;
+    
+    2. Caso tenha errado alguma palavra-chave, escreva a palavra [remover] para apagar a última palavra digitada;
+    
+    3. Após escrever todas as palavras-chaves desejadas, aperte a tecla ENTER novamente para iniciar a análise.\n
+    
+    # CONSIDERAÇÕES #
+    
+    -> Ao final da análise, as palavras-chaves serão dispostas em ordem decrescente de quantidade de vezes que apareceram na base de dados.
+    
+    -> Um gráfico de barras também aparacerá, onde será possível fazer o download do mesmo em .PNG após clicar no disquete na parte inferior.
+    
+    -> Por fim, o algoritmo criará um arquivo excel (.xlsx) na mesma pasta onde foi executado, contendo todas as palavras-chaves digitadas pelo usuário em cada coluna e abaixo estarão as frases onde essas palavras foram encontradas.
+    """
+    console = Console()
+    rules = Markdown(markdown)
+    console.print(rules)
 
+    lista_palavras_chave = []
     palavras = input()
     while palavras != '':
         if palavras == 'remover':
@@ -75,6 +99,11 @@ def main():
     # Analisando dados
     lista = input_palavras_chave()
 
+    # Processando
+    for i in tqdm(range(10), 'Processando...'):
+        sleep(0.1)
+    print('\n')
+
     # Organizando palavras em ordem decrescente
     list_sorted = quantidade_respostas(lista, op_fisica)
 
@@ -85,3 +114,5 @@ def main():
 
 
 main()
+
+
